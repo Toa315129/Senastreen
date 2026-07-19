@@ -9,6 +9,8 @@
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- 📌 เพิ่มไลบรารี jsPDF สำหรับแปลงภาพเป็น PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -271,6 +273,8 @@
             <div class="btn-group">
                 <button class="btn-panel btn-main" onclick="OS.downloadLiveNewspaper()">✧ บันทึกวิดีโอ (Live Photo)</button>
                 <button class="btn-panel btn-secondary" onclick="OS.downloadStaticImage()">↓ ดาวน์โหลดภาพนิ่ง</button>
+                <!-- 📌 เพิ่มปุ่มปริ้น PDF ตรงนี้ -->
+                <button class="btn-panel btn-secondary" onclick="OS.printToPDF()">🖨️ ปริ้นเป็นไฟล์ PDF</button>
                 <button class="btn-panel btn-secondary" style="background:transparent; border:none; text-decoration:underline; color:var(--ink-light);" onclick="location.reload()">กลับไปถ่ายใหม่</button>
             </div>
         </div>
@@ -477,6 +481,14 @@
                 a.href = D.final.src; a.click();
             }
 
+            // 📌 ฟังก์ชันสำหรับเจนและสั่งปริ้นเป็นไฟล์ PDF ขนาดกระดาษ A4
+            function printToPDF() {
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF('p', 'mm', 'a4');
+                doc.addImage(D.final.src, 'JPEG', 0, 0, 210, 297);
+                doc.save(`CanvasBooth_${Date.now()}.pdf`);
+            }
+
             async function downloadLiveNewspaper() {
                 const btn = event.target; const origText = btn.innerText;
                 btn.innerText = "⏳ Recording... (7s)"; btn.disabled = true;
@@ -511,7 +523,8 @@
                 }, 40);
             }
 
-            return { startCamera, toggleCamFlip, toggleTimer, toggleMirror, takePressPhoto, downloadStaticImage, downloadLiveNewspaper };
+            // 📌 ทำการส่งออกฟังก์ชัน printToPDF ออกไปด้วย
+            return { startCamera, toggleCamFlip, toggleTimer, toggleMirror, takePressPhoto, downloadStaticImage, printToPDF, downloadLiveNewspaper };
         })();
     </script>
 </body>
