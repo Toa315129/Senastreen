@@ -5,53 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>ทรงเสนา DAILY | Premium Newspaper Photobooth</title>
+    <title>CANVAS STUDIO | ตู้ถ่ายรูปทรงวาด</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-    <!-- Editorial & Premium Fonts -->
+    <!-- นำเข้าฟอนต์สไตล์มินิมอล/งานอาร์ต -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chonburi&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Sarabun:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Playfair+Display:ital,wght@0,600;1,600&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* Luxury Paper & Ink Palette */
-            --bg-dark: #0f0e0c;
-            --paper-cream: #f5f2e9;
-            --ink-black: #1a1917;
-            --ink-muted: #5e5a52;
-            --gold-accent: #c5a880;
+            /* โทนสีครีม-งานวาดเขียน */
+            --bg-paper: #F7F5F0;
+            --bg-paper-dark: #EAE6DF;
+            --ink-black: #2A2826;
+            --ink-light: #5E5A54;
+            --accent-color: #D4A373;
             
-            --font-display-th: 'Chonburi', serif;
             --font-display-en: 'Playfair Display', serif;
-            --font-body: 'Sarabun', sans-serif;
+            --font-handwriting: 'Caveat', cursive;
+            --font-body: 'Prompt', sans-serif;
+            
+            --frame-preview: none;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
 
         body {
             margin: 0; padding: 0;
-            background: var(--bg-dark);
+            background: var(--bg-paper);
             height: 100vh; height: 100dvh; width: 100vw;
             overflow: hidden;
-            color: #fff;
+            color: var(--ink-black);
             font-family: var(--font-body);
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* Ambient subtle grain overlay */
+        /* Ambient subtle paper texture overlay */
         body::before {
             content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 999;
-            opacity: 0.03; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.4; mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
         }
 
         .screen {
             position: absolute; inset: 0;
             display: flex; flex-direction: column;
             opacity: 0; pointer-events: none;
-            transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 10;
         }
         .screen.active { opacity: 1; pointer-events: auto; }
@@ -59,147 +62,144 @@
         /* --- 1. HOME SCREEN --- */
         #screen-home { 
             justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle, #221e17 0%, #0f0e0c 100%);
+            background: radial-gradient(circle at center, #FFFCF9 0%, #F0EBE1 100%);
         }
-        
         .title-masthead {
-            font-family: var(--font-display-en); font-weight: 700;
-            font-size: clamp(1rem, 3vw, 1.5rem); color: var(--gold-accent);
-            letter-spacing: 4px; margin-bottom: 10px; text-transform: uppercase;
+            font-family: var(--font-handwriting); font-weight: 600;
+            font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--accent-color);
+            letter-spacing: 2px; margin-bottom: 5px; transform: rotate(-2deg);
         }
-        
         .main-headline {
-            font-family: var(--font-display-th);
-            font-size: clamp(3.5rem, 9vw, 6.5rem);
-            color: var(--paper-cream); margin: 0; line-height: 1.2;
-        }
-        
-        .sub-headline {
-            font-family: var(--font-body); font-weight: 300;
-            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-            color: #a49e92; margin-top: 15px; margin-bottom: 50px;
+            font-family: var(--font-display-en);
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            color: var(--ink-black); margin: 0; line-height: 1.1;
             letter-spacing: 1px;
         }
-
+        .sub-headline {
+            font-family: var(--font-body); font-weight: 300;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--ink-light); margin-top: 20px; margin-bottom: 60px;
+            letter-spacing: 2px;
+        }
         .btn-editorial {
-            background: transparent; border: 1px solid var(--gold-accent);
-            color: var(--paper-cream); padding: 16px 45px;
-            font-size: 1.1rem; border-radius: 0; cursor: pointer;
-            transition: all 0.4s ease; font-family: var(--font-body);
+            background: transparent; border: 2px solid var(--ink-black);
+            color: var(--ink-black); padding: 15px 50px;
+            font-size: 1.1rem; border-radius: 50px; cursor: pointer;
+            transition: all 0.4s ease; font-family: var(--font-body); font-weight: 500;
             letter-spacing: 2px; text-transform: uppercase;
         }
-        .btn-editorial:hover { background: var(--paper-cream); color: var(--ink-black); border-color: var(--paper-cream); }
-        .btn-editorial:active { transform: scale(0.97); }
+        .btn-editorial:hover { background: var(--ink-black); color: var(--bg-paper); }
+        .btn-editorial:active { transform: scale(0.95); }
 
         /* --- 2. CAMERA SCREEN --- */
-        #screen-cam { background: #000; }
+        #screen-cam { background: var(--bg-paper-dark); }
         
         .cam-navbar {
             height: 70px; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px; background: rgba(15, 14, 12, 0.95);
-            border-bottom: 1px solid #2d2a24; z-index: 20;
+            padding: 0 30px; background: rgba(247, 245, 240, 0.95);
+            border-bottom: 1px solid rgba(42, 40, 38, 0.1); z-index: 20;
         }
-        .brand-badge { font-family: var(--font-display-th); color: var(--gold-accent); font-size: 1.3rem; }
+        .brand-badge { font-family: var(--font-display-en); color: var(--ink-black); font-size: 1.2rem; font-weight: 600; letter-spacing: 1px; }
 
-        .viewport { flex: 1; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); filter: grayscale(100%) contrast(1.15) brightness(0.95); }
+        .viewport { flex: 1; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #d0c9bd; }
+        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
         
-        /* Interactive Overlay on Camera to preview the Newspaper layout */
-        .cam-overlay-grid {
-            position: absolute; inset: 0; pointer-events: none;
-            border: 40px solid rgba(15, 14, 12, 0.5);
-            display: flex; flex-direction: column; justify-content: space-between; padding: 20px;
-        }
-        .cam-guide-text {
-            align-self: center; background: rgba(0,0,0,0.7); padding: 6px 16px;
-            font-size: 0.85rem; letter-spacing: 1px; color: var(--gold-accent); border: 1px solid var(--gold-accent);
+        /* กรอบพรีวิวบนจอแบบโปร่งใส */
+        .frame-overlay-preview {
+            position: absolute; inset: 0; pointer-events: none; z-index: 15;
+            background-image: var(--frame-preview);
+            background-size: contain; background-position: center; background-repeat: no-repeat;
+            opacity: 0.9;
         }
 
         .cam-sidebar {
             position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-            display: flex; flex-direction: column; gap: 18px; z-index: 50;
+            display: flex; flex-direction: column; gap: 15px; z-index: 50;
         }
         .btn-circle-tool {
-            width: 50px; height: 50px; background: rgba(26, 25, 23, 0.85); 
-            border: 1px solid rgba(197, 168, 128, 0.4); border-radius: 50%; color: var(--paper-cream);
+            width: 50px; height: 50px; background: rgba(255, 255, 255, 0.8); 
+            border: 1px solid rgba(42, 40, 38, 0.2); border-radius: 50%; color: var(--ink-black);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; cursor: pointer; transition: 0.3s;
+            font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
-        .btn-circle-tool:hover { border-color: var(--gold-accent); color: var(--gold-accent); }
+        .btn-circle-tool:hover { background: var(--ink-black); color: var(--bg-paper); }
 
         #countdown {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-size: 9rem; font-family: var(--font-display-en); color: var(--gold-accent); display: none;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.7); z-index: 100; font-weight: bold;
+            font-size: 10rem; font-family: var(--font-display-en); color: #fff; display: none;
+            text-shadow: 0 5px 30px rgba(0,0,0,0.3); z-index: 100; font-weight: 600;
         }
 
         .cam-footer {
-            height: 130px; background: rgba(15, 14, 12, 0.95);
+            height: 120px; background: rgba(247, 245, 240, 0.95);
             display: flex; align-items: center; justify-content: center; z-index: 20;
-            border-top: 1px solid #2d2a24;
+            border-top: 1px solid rgba(42, 40, 38, 0.1);
         }
         .shutter-trigger {
-            width: 75px; height: 75px; border: 2px solid var(--gold-accent); border-radius: 50%;
+            width: 75px; height: 75px; border: 3px solid var(--ink-black); border-radius: 50%;
             display: flex; align-items: center; justify-content: center; cursor: pointer;
+            background: transparent;
         }
-        .shutter-inner { width: 61px; height: 61px; background: var(--paper-cream); border-radius: 50%; transition: 0.2s; }
-        .shutter-trigger:active .shutter-inner { transform: scale(0.9); background: var(--gold-accent); }
+        .shutter-inner { width: 57px; height: 57px; background: var(--ink-black); border-radius: 50%; transition: 0.2s; }
+        .shutter-trigger:active .shutter-inner { transform: scale(0.85); background: var(--accent-color); }
 
         /* --- 3. RESULT SCREEN --- */
         #screen-result { 
             justify-content: center; align-items: center; 
-            background: #141311; flex-direction: row; gap: 5vw; padding: 40px;
+            background: #EAE6DF; flex-direction: row; gap: 4vw; padding: 40px;
         }
         
         .magazine-dispenser {
-            height: 82vh; aspect-ratio: 210/297; /* Perfect A4 Ratio */
-            background: #090908; padding: 5px; box-shadow: 0 30px 70px rgba(0,0,0,0.8);
-            overflow: hidden; position: relative; border: 1px solid #282520;
+            height: 85vh; aspect-ratio: 210/297;
+            background: #fff; padding: 0; box-shadow: 10px 20px 50px rgba(0,0,0,0.15), -2px -2px 10px rgba(255,255,255,0.5);
+            overflow: hidden; position: relative; border-radius: 4px;
         }
         .newspaper-sheet { 
             width: 100%; height: auto; display: block; 
             transform: translateY(105%); 
-            transition: transform 3.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
         .newspaper-sheet.ejected { transform: translateY(0); }
 
         .editorial-panel {
-            width: 350px; display: flex; flex-direction: column; gap: 24px;
-            opacity: 0; transform: translateX(20px); transition: all 1s ease 2.5s;
+            width: 360px; display: flex; flex-direction: column; gap: 20px;
+            opacity: 0; transform: translateX(20px); transition: all 1s ease 2s;
         }
         .editorial-panel.show { opacity: 1; transform: translateX(0); }
 
         .log-terminal {
-            font-family: var(--font-body); color: var(--gold-accent);
-            background: #1c1a17; padding: 20px; border: 1px solid #2d2a24;
-            font-size: 0.9rem; border-radius: 4px;
+            font-family: var(--font-body); color: var(--ink-light);
+            background: #fff; padding: 20px; border: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.9rem; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03);
         }
-        .progress-track { height: 2px; background: #2d2a24; width: 100%; margin-top: 12px; position: relative; overflow: hidden; }
-        .progress-fill { position: absolute; left:0; top:0; bottom:0; background: var(--gold-accent); width: 0%; transition: width 0.2s; }
+        .progress-track { height: 4px; background: var(--bg-paper-dark); width: 100%; margin-top: 12px; position: relative; overflow: hidden; border-radius: 2px;}
+        .progress-fill { position: absolute; left:0; top:0; bottom:0; background: var(--ink-black); width: 0%; transition: width 0.2s; }
 
         .qr-card { 
-            background: var(--paper-cream); padding: 20px; text-align: center; 
-            display: none; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            background: #fff; padding: 25px; text-align: center; border-radius: 12px;
+            display: none; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
-        .qr-card.active { display: block; animation: fadeIn 0.6s ease forwards; }
-        .qr-card span { color: var(--ink-black); font-size: 0.85rem; font-weight: 600; display: block; margin-top: 10px;}
+        .qr-card.active { display: block; animation: fadeIn 0.8s ease forwards; }
+        .qr-card span { color: var(--ink-black); font-size: 0.9rem; font-weight: 500; display: block; margin-top: 15px; letter-spacing: 1px;}
 
-        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .btn-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
         .btn-panel {
-            padding: 14px; font-family: var(--font-body); font-weight: 600; font-size: 0.95rem;
-            cursor: pointer; width: 100%; border-radius: 4px; display: flex; align-items: center; 
+            padding: 15px; font-family: var(--font-body); font-weight: 500; font-size: 0.95rem;
+            cursor: pointer; width: 100%; border-radius: 50px; display: flex; align-items: center; 
             justify-content: center; gap: 10px; border: none; transition: 0.3s;
         }
-        .btn-main { background: var(--gold-accent); color: var(--ink-black); }
-        .btn-main:hover { background: var(--paper-cream); }
-        .btn-secondary { background: #26231f; border: 1px solid #3d3830; color: var(--paper-cream); }
-        .btn-secondary:hover { background: #332f2a; }
+        .btn-main { background: var(--ink-black); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .btn-main:hover { background: #111; transform: translateY(-2px); }
+        .btn-secondary { background: #fff; border: 1px solid rgba(0,0,0,0.1); color: var(--ink-black); }
+        .btn-secondary:hover { background: var(--bg-paper); }
 
         #flash { position: fixed; inset: 0; background: #fff; z-index: 9999; opacity: 0; pointer-events: none; }
         
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         @media (max-width: 1024px) {
             #screen-result { flex-direction: column; padding: 20px; overflow-y: auto; justify-content: flex-start; }
-            .magazine-dispenser { height: 52vh; flex-shrink: 0; margin-bottom: 20px; }
+            .magazine-dispenser { height: 60vh; flex-shrink: 0; margin-bottom: 20px; }
             .editorial-panel { width: 100%; padding-bottom: 40px; }
             .btn-group { flex-direction: row; flex-wrap: wrap; }
             .btn-panel { flex: 1; min-width: 140px; }
@@ -208,28 +208,25 @@
 </head>
 <body>
 
-    <!-- 1. Home Masthead Screen -->
     <div id="screen-home" class="screen active">
-        <div class="title-masthead">Special Memorial Edition</div>
-        <h1 class="main-headline">ทรงเสนา DAILY</h1>
-        <div class="sub-headline">บันทึกประวัติศาสตร์แห่งเกียรติภูมิ • ตะกั่วป่าเสนานุกูล</div>
-        <button class="btn-editorial" onclick="OS.startCamera()">Enter Studio</button>
+        <div class="title-masthead">custom frame studio</div>
+        <h1 class="main-headline">CANVAS<br>BOOTH</h1>
+        <div class="sub-headline">ตู้ถ่ายรูปทรงวาด • บันทึกความทรงจำโทนอุ่น</div>
+        <button class="btn-editorial" onclick="OS.startCamera()">Tap to Start</button>
     </div>
 
-    <!-- 2. Interactive Press Camera Screen -->
     <div id="screen-cam" class="screen">
         <div class="cam-navbar">
-            <div class="brand-badge">ทรงเสนา PRESS</div>
-            <div id="clock" style="font-family:var(--font-display-en); color:var(--gold-accent); letter-spacing: 1px;">00:00</div>
+            <div class="brand-badge">CANVAS STUDIO</div>
+            <div id="clock" style="font-family:var(--font-display-en); color:var(--ink-light); font-weight:600;">00:00</div>
         </div>
         
         <div class="viewport">
             <video id="video-feed" autoplay playsinline muted></video>
-            <div id="countdown">3</div> 
+            <!-- แสดงกรอบแบบ Overlay ให้เล็งตำแหน่ง -->
+            <div class="frame-overlay-preview"></div>
             
-            <div class="cam-overlay-grid">
-                <div class="cam-guide-text">PORTRAIT FRAMING AREA</div>
-            </div>
+            <div id="countdown">3</div> 
             
             <div class="cam-sidebar">
                 <div class="btn-circle-tool" onclick="OS.toggleCamFlip()">↻</div>
@@ -245,27 +242,26 @@
         </div>
     </div>
 
-    <!-- 3. Classic Editorial Result Screen -->
     <div id="screen-result" class="screen">
         <div class="magazine-dispenser">
-            <img id="final-img" class="newspaper-sheet" alt="Newspaper Print Out">
+            <img id="final-img" class="newspaper-sheet" alt="Canvas Print Out">
         </div>
 
         <div class="editorial-panel" id="res-sidebar">
             <div class="log-terminal">
-                <div id="log-text">> Printing Archive Copy...</div>
+                <div id="log-text">Processing your masterpiece...</div>
                 <div class="progress-track"><div class="progress-fill" id="load-fill"></div></div>
             </div>
 
             <div class="qr-card" id="qr-box">
                 <div id="qrcode" style="display:flex; justify-content:center;"></div>
-                <span>SCAN TO DOWNLOAD DIGITAL PRESS</span>
+                <span>SCAN TO DOWNLOAD</span>
             </div>
             
             <div class="btn-group">
-                <button class="btn-panel btn-main" onclick="OS.downloadLiveNewspaper()">🎥 บันทึกวิดีโอหนังสือพิมพ์ขยับได้ (7s)</button>
-                <button class="btn-panel btn-secondary" onclick="OS.downloadStaticImage()">📥 ดาวน์โหลดภาพนิ่ง (A4)</button>
-                <button class="btn-panel btn-secondary" style="opacity:0.6;" onclick="location.reload()">เสร็จสิ้น / ออกแบบใหม่</button>
+                <button class="btn-panel btn-main" onclick="OS.downloadLiveNewspaper()">✧ บันทึกวิดีโอ (Live Photo)</button>
+                <button class="btn-panel btn-secondary" onclick="OS.downloadStaticImage()">↓ ดาวน์โหลดภาพนิ่ง</button>
+                <button class="btn-panel btn-secondary" style="background:transparent; border:none; text-decoration:underline; color:var(--ink-light);" onclick="location.reload()">กลับไปถ่ายใหม่</button>
             </div>
         </div>
     </div>
@@ -274,16 +270,33 @@
     <canvas id="hidden-canvas" style="display:none"></canvas> 
 
     <script>
+        // ==========================================
+        // 🎨 ตั้งค่ากรอบและการตกแต่งภาพ 
+        // ==========================================
+        const CONFIG = {
+            // ใส่ชื่อไฟล์รูปภาพกรอบของคุณที่นี่ (ไฟล์ต้องอยู่ในโฟลเดอร์เดียวกัน)
+            frameUrl: 'IMG_9405.png', 
+            
+            // ขนาดของรูปที่ประมวลผลขั้นสุดท้าย (แนะนำให้ตั้งเท่าขนาดไฟล์ IMG_9405.png ของคุณเป๊ะๆ เช่น 1240x1754)
+            canvasWidth: 1240,
+            canvasHeight: 1754,
+            
+            // ตำแหน่งภาพถ่ายจากกล้อง 
+            // ให้ตั้ง X: 0, Y: 0 และ Width, Height ให้เต็มจอ หากกรอบของคุณเป็นแบบเจาะรูโปร่งใสตรงกลางอยู่แล้ว
+            photoX: 0,
+            photoY: 0,
+            photoWidth: 1240,
+            photoHeight: 1754,
+
+            // เปิด/ปิด ฟิลเตอร์โทนอุ่นสไตล์งานวาด (Warm Sketch Filter)
+            applySketchFilter: true,
+            
+            // ImgBB API Key (สำหรับสร้าง QR Code)
+            imgbbApiKey: 'ffc90ad0bc5c7e0c056b68ef7430304a'
+        };
+        // ==========================================
+
         const OS = (function() {
-            // ImgBB API Key
-            const API_KEY = 'ffc90ad0bc5c7e0c056b68ef7430304a'; 
-
-            // Configuration for A4 Newspaper Grid Layout
-            const C = {
-                w: 1240,
-                h: 1754, // Standard A4 Dimensions at high res
-            };
-
             let s = { 
                 capturedPhoto: null,
                 stream: null, 
@@ -299,11 +312,16 @@
                 flash: document.getElementById('flash'), final: document.getElementById('final-img'), btnTimer: document.getElementById('btn-timer')
             };
 
-            // Audio Subsystem
+            const frameImageObj = new Image();
+            frameImageObj.crossOrigin = "anonymous";
+            frameImageObj.src = CONFIG.frameUrl;
+            
+            document.documentElement.style.setProperty('--frame-preview', `url('${CONFIG.frameUrl}')`);
+
             const Aud = {
                 ctx: null,
                 init() { if(!this.ctx) this.ctx = new (window.AudioContext||window.webkitAudioContext)(); },
-                play(freq, type='sine', duration=0.15, vol=0.1) {
+                play(freq, type='sine', duration=0.1, vol=0.05) {
                     this.init(); const o = this.ctx.createOscillator(); const g = this.ctx.createGain();
                     o.type = type; o.frequency.setValueAtTime(freq, this.ctx.currentTime);
                     g.gain.setValueAtTime(vol, this.ctx.currentTime); g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
@@ -311,10 +329,9 @@
                 }
             };
 
-            // Real-time Clock running in background
             setInterval(() => {
                 const d = new Date();
-                document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0') + " น.";
+                document.getElementById('clock').innerText = d.getHours().toString().padStart(2,'0')+":"+d.getMinutes().toString().padStart(2,'0');
             }, 1000);
 
             function changeScreen(name) {
@@ -332,31 +349,29 @@
                     D.video.srcObject = s.stream;
                     D.video.style.transform = s.mirror ? "scaleX(-1)" : "scaleX(1)";
                     changeScreen('cam');
-                } catch(e) { alert("กรุณาเปิดระบบการเข้าถึงกล้องถ่ายภาพ"); }
+                } catch(e) { alert("กรุณาเปิดระบบการเข้าถึงกล้องถ่ายภาพ (Camera Access)"); }
             }
 
             function toggleCamFlip() { s.facingMode = (s.facingMode === 'user') ? 'environment' : 'user'; startCamera(); }
-            function toggleTimer() { const opts = [3, 5, 8]; s.timer = opts[(opts.indexOf(s.timer)+1)%opts.length]; D.btnTimer.innerText = s.timer+"s"; Aud.play(440); }
-            function toggleMirror() { s.mirror = !s.mirror; D.video.style.transform = s.mirror ? "scaleX(-1)" : "scaleX(1)"; Aud.play(440); }
+            function toggleTimer() { const opts = [3, 5, 8]; s.timer = opts[(opts.indexOf(s.timer)+1)%opts.length]; D.btnTimer.innerText = s.timer+"s"; Aud.play(600); }
+            function toggleMirror() { s.mirror = !s.mirror; D.video.style.transform = s.mirror ? "scaleX(-1)" : "scaleX(1)"; Aud.play(600); }
 
             async function takePressPhoto() {
                 if(s.processing) return; s.processing = true;
                 
-                // Countdown flow
                 D.count.style.display = 'block';
                 for(let i = s.timer; i > 0; i--) {
                     D.count.innerText = i;
-                    Aud.play(659.25, 'sine', 0.1, 0.05);
+                    Aud.play(800, 'sine', 0.1, 0.05);
                     await new Promise(r => setTimeout(r, 1000));
                 }
                 D.count.style.display = 'none';
 
-                // Flash & Shutter effect
-                Aud.play(150, 'square', 0.3, 0.4);
+                // เสียงชัตเตอร์
+                Aud.play(150, 'square', 0.3, 0.3);
                 D.flash.style.opacity = '1';
-                setTimeout(() => D.flash.style.opacity = '0', 150);
+                setTimeout(() => D.flash.style.opacity = '0', 200);
 
-                // Capture Frame from Video Stream
                 const tempCvs = document.createElement('canvas');
                 tempCvs.width = D.video.videoWidth; tempCvs.height = D.video.videoHeight;
                 const tempCtx = tempCvs.getContext('2d');
@@ -367,58 +382,24 @@
                 renderNewspaperOutput();
             }
 
-            // High-End Newspaper Renderer Engine
             function drawNewspaperCanvas(targetCanvas, photoSourceElement) {
                 const ctx = targetCanvas.getContext('2d');
-                const w = C.w; const h = C.h;
+                const w = CONFIG.canvasWidth; const h = CONFIG.canvasHeight;
                 
                 targetCanvas.width = w; targetCanvas.height = h;
 
-                // 1. Draw Paper background with dynamic textured tint
-                ctx.fillStyle = '#f5f1e6'; ctx.fillRect(0, 0, w, h);
-                
-                // Vintage Editorial Layout Accents (Double Borders)
-                ctx.strokeStyle = '#1a1917'; ctx.lineWidth = 6; ctx.strokeRect(35, 35, w-70, h-70);
-                ctx.lineWidth = 1.5; ctx.strokeRect(45, 45, w-90, h-90);
+                // พื้นหลังสีครีม (เผื่อรูปไม่เต็ม)
+                ctx.fillStyle = '#F7F5F0'; 
+                ctx.fillRect(0, 0, w, h);
 
-                // 2. Top Header Masthead Section
-                ctx.fillStyle = '#1a1917'; ctx.textAlign = 'center';
-                ctx.font = 'normal 24px "Playfair Display"'; ctx.textBaseline = 'top';
-                ctx.fillText("THE TAKUAPA SENANUKUL MEMORIAL ARCHIVE", w/2, 65);
-
-                // Border rules for the newspaper ear elements
-                ctx.beginPath(); ctx.moveTo(45, 110); ctx.lineTo(w-45, 110); ctx.lineWidth = 2; ctx.stroke();
-                
-                // Date & Meta Section
-                ctx.font = 'italic bold 18px "Sarabun"';
-                ctx.textAlign = 'left'; ctx.fillText("ปีที่ ๘๔ ฉบับประวัติศาสตร์", 60, 123);
-                ctx.textAlign = 'right'; ctx.fillText("พังงา, ประเทศไทย — ปีการศึกษา ๒๐๒๖", w-60, 123);
-                
-                ctx.beginPath(); ctx.moveTo(45, 155); ctx.lineTo(w-45, 155); ctx.lineWidth = 5; ctx.stroke();
-
-                // 3. Huge Bold Newspaper Title Header ("ทรงเสนา")
-                ctx.font = 'normal 125px "Chonburi"'; ctx.textAlign = 'center'; ctx.fillStyle = '#1a1917';
-                ctx.fillText("ทรงเสนา", w/2, 175);
-                
-                ctx.font = 'italic 28px "Playfair Display"'; ctx.fillStyle = '#5e5a52';
-                ctx.fillText("— The Premium Special Edition Portfolio —", w/2, 315);
-                
-                ctx.beginPath(); ctx.moveTo(60, 365); ctx.lineTo(w-60, 365); ctx.lineWidth = 1.5; ctx.stroke();
-
-                // 4. Main Photo Placement (Single Frame Architecture)
-                const pW = 1060; const pH = 750; // High clarity landscape display frame
-                const pX = (w - pW) / 2; const pY = 400;
-
-                // Photo frame background border box
-                ctx.fillStyle = '#eadecc'; ctx.fillRect(pX - 10, pY - 10, pW + 20, pH + 20);
-                ctx.strokeStyle = '#1a1917'; ctx.lineWidth = 2; ctx.strokeRect(pX - 10, pY - 10, pW + 20, pH + 20);
-
+                // 1. วาดรูปภาพจากกล้อง
                 if(photoSourceElement) {
-                    // Extract and crop image to fit the layout perfectly
+                    const pX = CONFIG.photoX; const pY = CONFIG.photoY;
+                    const pW = CONFIG.photoWidth; const pH = CONFIG.photoHeight;
+
                     ctx.save();
                     ctx.beginPath(); ctx.rect(pX, pY, pW, pH); ctx.clip();
                     
-                    // Draw image with calculated cover values
                     const sR = photoSourceElement.width / photoSourceElement.height;
                     const tR = pW / pH;
                     let sx, sy, sw, sh;
@@ -428,60 +409,29 @@
                     ctx.drawImage(photoSourceElement, sx, sy, sw, sh, pX, pY, pW, pH);
                     ctx.restore();
 
-                    // Apply Newspaper Print Ink Processing via image matrix filter lookup
-                    const imgData = ctx.getImageData(pX, pY, pW, pH);
-                    const d = imgData.data;
-                    for (let i = 0; i < d.length; i += 4) {
-                        let r = d[i], g = d[i+1], b = d[i+2];
-                        // High Contrast Monochrome formulation
-                        let gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                        // Boost contrast for authentic newspaper look
-                        gray = (gray - 128) * 1.3 + 128;
-                        gray = Math.max(0, Math.min(255, gray));
-                        d[i] = d[i+1] = d[i+2] = gray;
+                    // Apply ฟิลเตอร์โทนอุ่นสไตล์งานวาด (Warm Sepia Sketch)
+                    if(CONFIG.applySketchFilter) {
+                        const imgData = ctx.getImageData(pX, pY, pW, pH);
+                        const d = imgData.data;
+                        for (let i = 0; i < d.length; i += 4) {
+                            let r = d[i], g = d[i+1], b = d[i+2];
+                            // สร้างภาพขาวดำที่มีคอนทราสต์สูง
+                            let gray = 0.299 * r + 0.587 * g + 0.114 * b;
+                            gray = (gray - 128) * 1.15 + 128; // เพิ่ม Contrast
+                            
+                            // ย้อมสีน้ำตาลอ่อนๆ ให้ดูเป็นกระดาษ/งานวาด (Sepia tint)
+                            d[i] = Math.max(0, Math.min(255, gray + 30));     // R
+                            d[i+1] = Math.max(0, Math.min(255, gray + 15));   // G
+                            d[i+2] = Math.max(0, Math.min(255, gray - 10));   // B
+                        }
+                        ctx.putImageData(imgData, pX, pY);
                     }
-                    ctx.putImageData(imgData, pX, pY);
                 }
 
-                // Photo Caption
-                ctx.fillStyle = '#1a1917'; ctx.font = 'italic 18px "Sarabun"'; ctx.textAlign = 'center';
-                ctx.fillText("ภาพถ่ายบันทึกความทรงจำ ณ สตูดิโอเสนานุกูล เกียรติภูมิขจรไกลข้ามทศวรรษ", w/2, pY + pH + 35);
-
-                ctx.beginPath(); ctx.moveTo(60, pY + pH + 60); ctx.lineTo(w-60, pY + pH + 60); ctx.lineWidth = 3; ctx.stroke();
-
-                // 5. Multi-Column Faux News Articles Text (Global Thai Print Styling)
-                const colY = pY + pH + 85;
-                const colW = 340; const colGap = 20;
-                
-                // Column 1 Description
-                ctx.textAlign = 'left'; ctx.fillStyle = '#1a1917';
-                ctx.font = 'bold 24px "Sarabun"'; ctx.fillText("เกียรติภูมิแห่งเสนานุกูล", 60, colY);
-                ctx.font = 'normal 18px "Sarabun"'; ctx.fillStyle = '#333';
-                wrapText(ctx, "โรงเรียนตะกั่วป่าเสนานุกูล สถาบันการศึกษาอันทรงคุณค่าคู่แผ่นดินใต้ มุ่งมั่นพัฒนาเยาวชนและสร้างสรรค์นวัตกรรมสู่ระดับสากลอย่างยั่งยืน การเฉลิมฉลองครบรอบวาระพิเศษนี้นับเป็นอีกหนึ่งบันทึกหน้าสำคัญที่แสดงถึงพลังสามัคคีและความเป็นเลิศทางวิชาการและวัฒนธรรมอันโดดเด่น", 60, colY + 35, colW, 26);
-
-                // Column 2 Description
-                ctx.fillStyle = '#1a1917';
-                ctx.font = 'bold 24px "Sarabun"'; ctx.fillText("สืบสานศาสตร์ศิลป์ถิ่นใต้", 60 + colW + colGap, colY);
-                ctx.font = 'normal 18px "Sarabun"'; ctx.fillStyle = '#333';
-                wrapText(ctx, "เยาวชนรุ่นใหม่ร่วมสืบสานอารยธรรมและอัตลักษณ์ความเป็นไทยขับเคลื่อนสู่ระดับโลก ด้วยการผสมผสานมรดกทางภูมิปัญญาท้องถิ่นเข้ากับเทคโนโลยีดิจิทัลสมัยใหม่ ส่งเสริมผลงานและความคิดสร้างสรรค์ให้ประจักษ์แก่สายตานานาอารยประเทศอย่างเต็มภาคภูมิในฐานะลูกเสนา", 60 + colW + colGap, colY + 35, colW, 26);
-
-                // Column 3 Digital Integration & QR placeholder marker
-                ctx.fillStyle = '#1a1917';
-                ctx.font = 'bold 24px "Sarabun"'; ctx.fillText("GLOBAL ARCHIVE", 60 + (colW * 2) + (colGap * 2), colY);
-                ctx.font = 'normal 18px "Sarabun"'; ctx.fillStyle = '#333';
-                wrapText(ctx, "บันทึกข้อมูลดิจิทัลนี้ถูกจัดเก็บระบบออนไลน์เพื่อส่งต่อความทรงจำอันทรงคุณค่าสู่อนาคต ท่านสามารถสแกนบาร์โค้ดคิวอาร์ที่ปรากฏอยู่บริเวณมุมขวาของหน้าหนังสือพิมพ์ฉบับพิเศษนี้เพื่อเข้าชมและดาวน์โหลดไฟล์ภาพและวิดีโอต้นฉบับความละเอียดสูงได้ทันที", 60 + (colW * 2) + (colGap * 2), colY + 35, colW, 26);
-            }
-
-            function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
-                const words = text.split(''); let line = '';
-                for(let n = 0; n < words.length; n++) {
-                    let testLine = line + words[n];
-                    let metrics = ctx.measureText(testLine);
-                    if (metrics.width > maxWidth && n > 0) {
-                        ctx.fillText(line, x, y); line = words[n]; y += lineHeight;
-                    } else { line = testLine; }
+                // 2. วาดกรอบ IMG_9405.png ทับด้านบนสุด
+                if(frameImageObj.complete && frameImageObj.src) {
+                    ctx.drawImage(frameImageObj, 0, 0, w, h);
                 }
-                ctx.fillText(line, x, y);
             }
 
             function renderNewspaperOutput() {
@@ -492,10 +442,9 @@
                 
                 changeScreen('res');
                 
-                // Slide out paper machine simulation effect
                 setTimeout(() => { D.final.classList.add('ejected'); }, 300);
-
-                confetti({ particleCount: 140, spread: 65, origin: { y: 0.6 }, colors: ['#c5a880', '#1a1917', '#ffffff'] });
+                // พลุสีเอิร์ธโทน
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#D4A373', '#2A2826', '#F7F5F0', '#A09C96'] });
 
                 setTimeout(() => {
                     document.getElementById('res-sidebar').classList.add('show');
@@ -508,41 +457,40 @@
                 const fill = document.getElementById('load-fill');
                 
                 let p = 0;
-                const int = setInterval(() => { if(p < 90) p += 7; fill.style.width = p+"%"; }, 100);
+                const int = setInterval(() => { if(p < 90) p += 5; fill.style.width = p+"%"; }, 100);
 
                 try {
                     const fd = new FormData(); fd.append("image", base64Data.split(',')[1]);
-                    log.innerText = "> Syncing cloud server archive...";
+                    log.innerText = "Creating digital cloud link...";
                     
-                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, { method: "POST", body: fd });
+                    const res = await fetch(`https://api.imgbb.com/1/upload?key=${CONFIG.imgbbApiKey}`, { method: "POST", body: fd });
                     const resJson = await res.json();
                     
                     clearInterval(int); fill.style.width = "100%";
 
                     if(resJson.success) {
-                        log.innerText = "> Press Generation Completed Successfully!";
+                        log.innerText = "Ready to download!";
                         document.getElementById('qrcode').innerHTML = "";
                         new QRCode(document.getElementById("qrcode"), {
-                            text: resJson.data.url, width: 140, height: 140,
-                            colorDark : "#1a1917", colorLight : "#f5f2e9",
+                            text: resJson.data.url, width: 130, height: 130,
+                            colorDark : "#2A2826", colorLight : "#ffffff",
                             correctLevel : QRCode.CorrectLevel.H
                         });
                         document.getElementById('qr-box').classList.add('active');
                     } else { throw new Error(); }
                 } catch(e) {
-                    clearInterval(int); log.innerText = "> Cloud archive error. Saving locally initialized.";
+                    clearInterval(int); log.innerText = "Cloud error. Local save available.";
                 }
             }
 
             function downloadStaticImage() {
-                const a = document.createElement('a'); a.download = `Takuapa_Sena_Newspaper_${Date.now()}.jpg`;
+                const a = document.createElement('a'); a.download = `CanvasBooth_${Date.now()}.jpg`;
                 a.href = D.final.src; a.click();
             }
 
-            // Global-tier Magical Live Photo Feature Generator (Animated Newspaper canvas capture)
             async function downloadLiveNewspaper() {
                 const btn = event.target; const origText = btn.innerText;
-                btn.innerText = "⏳ Generating Live Newspaper Video..."; btn.disabled = true;
+                btn.innerText = "⏳ Recording... (7s)"; btn.disabled = true;
 
                 const captureStream = D.canvas.captureStream(30);
                 const rec = new MediaRecorder(captureStream, { mimeType: 'video/webm' });
@@ -552,26 +500,23 @@
                 rec.onstop = () => {
                     const blob = new Blob(chunks, { type: 'video/webm' });
                     const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a'); a.href = url; a.download = `Live_Newspaper_${Date.now()}.webm`;
+                    const a = document.createElement('a'); a.href = url; a.download = `CanvasLive_${Date.now()}.webm`;
                     a.click();
                     
-                    // Return canvas display framework back to normal state
                     drawNewspaperCanvas(D.canvas, s.capturedPhoto);
                     D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-                    btn.innerText = "✅ Download Finished!";
+                    btn.innerText = "✅ Done!";
                     setTimeout(() => { btn.innerText = origText; btn.disabled = false; }, 2000);
                 };
 
                 rec.start();
                 let startTime = Date.now();
 
-                // Animate properties inside the canvas to simulate a magical moving portrait
                 const liveLoop = setInterval(() => {
-                    // Pull direct real-time visual frames directly from active camera preview element during loop phase
                     drawNewspaperCanvas(D.canvas, D.video);
                     D.final.src = D.canvas.toDataURL('image/jpeg', 0.7);
 
-                    if (Date.now() - startTime >= 7000) { // 7 seconds motion capture execution
+                    if (Date.now() - startTime >= 7000) { 
                         clearInterval(liveLoop); rec.stop();
                     }
                 }, 40);
