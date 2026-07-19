@@ -10,20 +10,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
-    <!-- นำเข้าฟอนต์สไตล์มินิมอล/งานอาร์ต -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Playfair+Display:ital,wght@0,600;1,600&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* โทนสีครีม-งานวาดเขียน */
             --bg-paper: #F7F5F0;
             --bg-paper-dark: #EAE6DF;
             --ink-black: #2A2826;
             --ink-light: #5E5A54;
             --accent-color: #D4A373;
-            
             --font-display-en: 'Playfair Display', serif;
             --font-handwriting: 'Caveat', cursive;
             --font-body: 'Prompt', sans-serif;
@@ -32,16 +29,12 @@
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
 
         body {
-            margin: 0; padding: 0;
-            background: var(--bg-paper);
-            height: 100vh; height: 100dvh; width: 100vw;
-            overflow: hidden;
-            color: var(--ink-black);
-            font-family: var(--font-body);
+            margin: 0; padding: 0; background: var(--bg-paper);
+            height: 100vh; height: 100dvh; width: 100vw; overflow: hidden;
+            color: var(--ink-black); font-family: var(--font-body);
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* Ambient subtle paper texture overlay */
         body::before {
             content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 999;
             opacity: 0.4; mix-blend-mode: multiply;
@@ -49,11 +42,9 @@
         }
 
         .screen {
-            position: absolute; inset: 0;
-            display: flex; flex-direction: column;
+            position: absolute; inset: 0; display: flex; flex-direction: column;
             opacity: 0; pointer-events: none;
-            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 10;
+            transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1); z-index: 10;
         }
         .screen.active { opacity: 1; pointer-events: auto; }
 
@@ -68,29 +59,24 @@
             letter-spacing: 2px; margin-bottom: 5px; transform: rotate(-2deg);
         }
         .main-headline {
-            font-family: var(--font-display-en);
-            font-size: clamp(3rem, 8vw, 5.5rem);
-            color: var(--ink-black); margin: 0; line-height: 1.1;
-            letter-spacing: 1px;
+            font-family: var(--font-display-en); font-size: clamp(3rem, 8vw, 5.5rem);
+            color: var(--ink-black); margin: 0; line-height: 1.1; letter-spacing: 1px;
         }
         .sub-headline {
-            font-family: var(--font-body); font-weight: 300;
-            font-size: clamp(1rem, 2vw, 1.2rem);
-            color: var(--ink-light); margin-top: 20px; margin-bottom: 60px;
-            letter-spacing: 2px;
+            font-family: var(--font-body); font-weight: 300; font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--ink-light); margin-top: 20px; margin-bottom: 60px; letter-spacing: 2px;
         }
         .btn-editorial {
-            background: transparent; border: 2px solid var(--ink-black);
-            color: var(--ink-black); padding: 15px 50px;
-            font-size: 1.1rem; border-radius: 50px; cursor: pointer;
+            background: transparent; border: 2px solid var(--ink-black); color: var(--ink-black);
+            padding: 15px 50px; font-size: 1.1rem; border-radius: 50px; cursor: pointer;
             transition: all 0.4s ease; font-family: var(--font-body); font-weight: 500;
             letter-spacing: 2px; text-transform: uppercase;
         }
-        .btn-editorial:hover { background: var(--ink-black); color: var(--bg-paper); }
+        .btn-editorial:hover { background: var(--ink-black); color: #fff; }
         .btn-editorial:active { transform: scale(0.95); }
 
         /* --- 2. CAMERA SCREEN --- */
-        #screen-cam { background: var(--bg-paper-dark); }
+        #screen-cam { background: #1c1b19; } 
         
         .cam-navbar {
             height: 70px; display: flex; justify-content: space-between; align-items: center;
@@ -102,14 +88,37 @@
         .viewport { 
             flex: 1; position: relative; overflow: hidden; 
             display: flex; justify-content: center; align-items: center; 
-            background: #1c1b19; 
+            padding: 20px 0;
         }
         
-        /* ปรับให้แสดงผลแบบ cover เพื่อให้ตรงกับระยะภาพจริงที่จะถูกบันทึก */
+        .live-preview-wrapper {
+            position: relative;
+            height: 100%;
+            aspect-ratio: 1240 / 1754;
+            background: #fff;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
         video#video-feed { 
-            width: 100%; height: 100%; 
+            position: absolute;
+            top: 21.66%;    
+            left: 5.64%;    
+            width: 88.71%;  
+            height: 44.47%; 
             object-fit: cover; 
-            transform: scaleX(-1); 
+            transform: scaleX(-1);
+            z-index: 1;
+            background: #000;
+        }
+
+        img.overlay-frame {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none; 
         }
 
         .cam-sidebar {
@@ -117,17 +126,17 @@
             display: flex; flex-direction: column; gap: 15px; z-index: 50;
         }
         .btn-circle-tool {
-            width: 50px; height: 50px; background: rgba(255, 255, 255, 0.8); 
+            width: 50px; height: 50px; background: rgba(255, 255, 255, 0.9); 
             border: 1px solid rgba(42, 40, 38, 0.2); border-radius: 50%; color: var(--ink-black);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .btn-circle-tool:hover { background: var(--ink-black); color: var(--bg-paper); }
+        .btn-circle-tool:hover { background: var(--ink-black); color: #fff; }
 
         #countdown {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-size: 10rem; font-family: var(--font-display-en); color: #fff; display: none;
-            text-shadow: 0 5px 30px rgba(0,0,0,0.3); z-index: 100; font-weight: 600;
+            font-size: 8rem; font-family: var(--font-display-en); color: #fff; display: none;
+            text-shadow: 0 5px 30px rgba(0,0,0,0.5); z-index: 100; font-weight: 600;
         }
 
         .cam-footer {
@@ -137,8 +146,7 @@
         }
         .shutter-trigger {
             width: 75px; height: 75px; border: 3px solid var(--ink-black); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; cursor: pointer;
-            background: transparent;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent;
         }
         .shutter-inner { width: 57px; height: 57px; background: var(--ink-black); border-radius: 50%; transition: 0.2s; }
         .shutter-trigger:active .shutter-inner { transform: scale(0.85); background: var(--accent-color); }
@@ -191,7 +199,7 @@
         .btn-main { background: var(--ink-black); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         .btn-main:hover { background: #111; transform: translateY(-2px); }
         .btn-secondary { background: #fff; border: 1px solid rgba(0,0,0,0.1); color: var(--ink-black); }
-        .btn-secondary:hover { background: var(--bg-paper); }
+        .btn-secondary:hover { background: #F7F5F0; }
 
         #flash { position: fixed; inset: 0; background: #fff; z-index: 9999; opacity: 0; pointer-events: none; }
         
@@ -222,13 +230,17 @@
         </div>
         
         <div class="viewport">
-            <video id="video-feed" autoplay playsinline muted></video>
-            
-            <div id="countdown">3</div> 
+            <div class="live-preview-wrapper">
+                <video id="video-feed" autoplay playsinline muted></video>
+                <img id="preview-overlay" class="overlay-frame" src="IMG_9405.png" alt="frame">
+                <!-- 📌 จุดแก้ไขที่ 1: เปลี่ยนตัวเลขเริ่มต้นบนหน้าจอเป็น 8 -->
+                <div id="countdown">8</div>
+            </div>
             
             <div class="cam-sidebar">
                 <div class="btn-circle-tool" onclick="OS.toggleCamFlip()">↻</div>
-                <div class="btn-circle-tool" onclick="OS.toggleTimer()" id="btn-timer">3s</div>
+                <!-- 📌 จุดแก้ไขที่ 2: เปลี่ยนข้อความปุ่มตัวเลือกเป็น 8s -->
+                <div class="btn-circle-tool" onclick="OS.toggleTimer()" id="btn-timer">8s</div>
                 <div class="btn-circle-tool" onclick="OS.toggleMirror()">↔</div>
             </div>
         </div>
@@ -268,36 +280,27 @@
     <canvas id="hidden-canvas" style="display:none"></canvas> 
 
     <script>
-        // ==========================================
-        // 🎨 ตั้งค่ากรอบและการตกแต่งภาพ 
-        // ==========================================
         const CONFIG = {
             frameUrl: 'IMG_9405.png', 
-            
-            // ขนาดของรูปที่ประมวลผลขั้นสุดท้าย (อิงตาม A4 มาตรฐาน)
             canvasWidth: 1240,
             canvasHeight: 1754,
-            
-            // ตำแหน่งภาพถ่ายจากกล้อง 
-            photoX: 0,
-            photoY: 0,
-            photoWidth: 1240,
-            photoHeight: 1754,
-
-            // เปิด/ปิด ฟิลเตอร์โทนอุ่นสไตล์งานวาด (Warm Sketch Filter)
+            photoX: 70,        
+            photoY: 380,       
+            photoWidth: 1100,  
+            photoHeight: 780,  
             applySketchFilter: true,
-            
-            // ImgBB API Key (สำหรับสร้าง QR Code)
             imgbbApiKey: 'ffc90ad0bc5c7e0c056b68ef7430304a'
         };
-        // ==========================================
+
+        document.getElementById('preview-overlay').src = CONFIG.frameUrl;
 
         const OS = (function() {
             let s = { 
                 capturedPhoto: null,
                 stream: null, 
                 processing: false,
-                timer: 3,
+                // 📌 จุดแก้ไขที่ 3: เปลี่ยนค่าเริ่มต้นของตัวนับเวลาทำงานจริงเป็น 8 วินาที
+                timer: 8,
                 facingMode: 'user',
                 mirror: true
             };
@@ -337,7 +340,6 @@
                 Aud.play(523.25, 'triangle', 0.2);
                 if(s.stream) s.stream.getTracks().forEach(t=>t.stop());
                 try {
-                    // ปรับค่าขอสัดส่วนกล้องเป็นทรงจัตุรัส เพื่อบีบให้เห็นมุมบนล่างกว้างขึ้น ไม่ซูมหน้าล้น
                     s.stream = await navigator.mediaDevices.getUserMedia({ 
                         video: { facingMode: s.facingMode, width: {ideal: 1240}, height: {ideal: 1240} }, audio: false 
                     });
@@ -385,7 +387,6 @@
                 ctx.fillStyle = '#F7F5F0'; 
                 ctx.fillRect(0, 0, w, h);
 
-                // 1. วาดรูปภาพจากกล้องแบบ Cover (เหมือนอันเก่า ขยายเต็มแผ่น ไม่เหลือขอบขาว ไม่เลื่อนลงล่าง)
                 if(photoSourceElement) {
                     const pX = CONFIG.photoX; const pY = CONFIG.photoY;
                     const pW = CONFIG.photoWidth; const pH = CONFIG.photoHeight;
@@ -402,7 +403,6 @@
                     ctx.drawImage(photoSourceElement, sx, sy, sw, sh, pX, pY, pW, pH);
                     ctx.restore();
 
-                    // Apply ฟิลเตอร์โทนอุ่นสไตล์งานวาด (Warm Sepia Sketch)
                     if(CONFIG.applySketchFilter) {
                         const imgData = ctx.getImageData(pX, pY, pW, pH);
                         const d = imgData.data;
@@ -419,7 +419,6 @@
                     }
                 }
 
-                // 2. วาดกรอบรูปทับลงไปบนภาพถ่ายจริง
                 if(frameImageObj.complete && frameImageObj.src) {
                     ctx.drawImage(frameImageObj, 0, 0, w, h);
                 }
