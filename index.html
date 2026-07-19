@@ -27,8 +27,6 @@
             --font-display-en: 'Playfair Display', serif;
             --font-handwriting: 'Caveat', cursive;
             --font-body: 'Prompt', sans-serif;
-            
-            --frame-preview: none;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
@@ -101,11 +99,19 @@
         }
         .brand-badge { font-family: var(--font-display-en); color: var(--ink-black); font-size: 1.2rem; font-weight: 600; letter-spacing: 1px; }
 
-        .viewport { flex: 1; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; background: #d0c9bd; }
-        video#video-feed { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        .viewport { 
+            flex: 1; position: relative; overflow: hidden; 
+            display: flex; justify-content: center; align-items: center; 
+            background: #1c1b19; /* พื้นหลังมืดขับให้ภาพกล้องเด่น */
+        }
         
-        /* กรอบพรีวิวบนจอแบบโปร่งใส */
-        
+        /* ปรับให้แสดงภาพแบบ contain เพื่อไม่ให้ภาพโดนซูมหรือครอปหลุดเฟรมเด็ดขาด */
+        video#video-feed { 
+            width: 100%; height: 100%; 
+            object-fit: contain; 
+            transform: scaleX(-1); 
+        }
+
         .cam-sidebar {
             position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
             display: flex; flex-direction: column; gap: 15px; z-index: 50;
@@ -217,8 +223,6 @@
         
         <div class="viewport">
             <video id="video-feed" autoplay playsinline muted></video>
-            <!-- แสดงกรอบแบบ Overlay ให้เล็งตำแหน่ง -->
-            <div class="frame-overlay-preview"></div>
             
             <div id="countdown">3</div> 
             
@@ -268,15 +272,13 @@
         // 🎨 ตั้งค่ากรอบและการตกแต่งภาพ 
         // ==========================================
         const CONFIG = {
-            // ใส่ชื่อไฟล์รูปภาพกรอบของคุณที่นี่ (ไฟล์ต้องอยู่ในโฟลเดอร์เดียวกัน)
             frameUrl: 'IMG_9405.png', 
             
-            // ขนาดของรูปที่ประมวลผลขั้นสุดท้าย (แนะนำให้ตั้งเท่าขนาดไฟล์ IMG_9405.png ของคุณเป๊ะๆ เช่น 1240x1754)
+            // ขนาดของรูปที่ประมวลผลขั้นสุดท้าย (อิงตาม A4 มาตรฐาน)
             canvasWidth: 1240,
             canvasHeight: 1754,
             
             // ตำแหน่งภาพถ่ายจากกล้อง 
-            // ให้ตั้ง X: 0, Y: 0 และ Width, Height ให้เต็มจอ หากกรอบของคุณเป็นแบบเจาะรูโปร่งใสตรงกลางอยู่แล้ว
             photoX: 0,
             photoY: 0,
             photoWidth: 1240,
@@ -309,8 +311,6 @@
             const frameImageObj = new Image();
             frameImageObj.crossOrigin = "anonymous";
             frameImageObj.src = CONFIG.frameUrl;
-            
-            document.documentElement.style.setProperty('--frame-preview', `url('${CONFIG.frameUrl}')`);
 
             const Aud = {
                 ctx: null,
@@ -361,7 +361,6 @@
                 }
                 D.count.style.display = 'none';
 
-                // เสียงชัตเตอร์
                 Aud.play(150, 'square', 0.3, 0.3);
                 D.flash.style.opacity = '1';
                 setTimeout(() => D.flash.style.opacity = '0', 200);
@@ -382,11 +381,11 @@
                 
                 targetCanvas.width = w; targetCanvas.height = h;
 
-                // พื้นหลังสีครีม (เผื่อรูปไม่เต็ม)
+                // พื้นหลังสีครีมมินิมอล
                 ctx.fillStyle = '#F7F5F0'; 
                 ctx.fillRect(0, 0, w, h);
 
-                // 1. วาดรูปภาพจากกล้อง
+                // 1. วาดรูปภาพจากกล้อง (เปลี่ยนการคำนวณเป็นแบบดึงค่าจริง ไม่ครอบตัดขยายซูม)
                 if(photoSourceElement) {
                     const pX = CONFIG.photoX; const pY = CONFIG.photoY;
                     const pW = CONFIG.photoWidth; const pH = CONFIG.photoHeight;
@@ -396,11 +395,18 @@
                     
                     const sR = photoSourceElement.width / photoSourceElement.height;
                     const tR = pW / pH;
-                    let sx, sy, sw, sh;
-                    if(sR > tR) { sh = photoSourceElement.height; sw = sh * tR; sx = (photoSourceElement.width - sw) / 2; sy = 0; } 
-                    else { sw = photoSourceElement.width; sh = sw / tR; sx = 0; sy = (photoSourceElement.height - sh) / 2; }
+                    let dx, dy, dw, dh;
+
+                    // คำนวณวางภาพแบบรักษาสัดส่วนจริง ไม่ซูมใบหน้าจนเพี้ยน
+                    if (sR > tR) {
+                        dw = pW; dh = pW / sR;
+                        dx = pX; dy = pY + (pH - dh) / 2;
+                    } else {
+                        dh = pH; dw = pH * sR;
+                        dx = pX + (pW - dw) / 2; dy = pY;
+                    }
                     
-                    ctx.drawImage(photoSourceElement, sx, sy, sw, sh, pX, pY, pW, pH);
+                    ctx.drawImage(photoSourceElement, 0, 0, photoSourceElement.width, photoSourceElement.height, dx, dy, dw, dh);
                     ctx.restore();
 
                     // Apply ฟิลเตอร์โทนอุ่นสไตล์งานวาด (Warm Sepia Sketch)
@@ -409,20 +415,18 @@
                         const d = imgData.data;
                         for (let i = 0; i < d.length; i += 4) {
                             let r = d[i], g = d[i+1], b = d[i+2];
-                            // สร้างภาพขาวดำที่มีคอนทราสต์สูง
                             let gray = 0.299 * r + 0.587 * g + 0.114 * b;
-                            gray = (gray - 128) * 1.15 + 128; // เพิ่ม Contrast
+                            gray = (gray - 128) * 1.15 + 128; 
                             
-                            // ย้อมสีน้ำตาลอ่อนๆ ให้ดูเป็นกระดาษ/งานวาด (Sepia tint)
-                            d[i] = Math.max(0, Math.min(255, gray + 30));     // R
-                            d[i+1] = Math.max(0, Math.min(255, gray + 15));   // G
-                            d[i+2] = Math.max(0, Math.min(255, gray - 10));   // B
+                            d[i] = Math.max(0, Math.min(255, gray + 30));     
+                            d[i+1] = Math.max(0, Math.min(255, gray + 15));   
+                            d[i+2] = Math.max(0, Math.min(255, gray - 10));   
                         }
                         ctx.putImageData(imgData, pX, pY);
                     }
                 }
 
-                // 2. วาดกรอบ IMG_9405.png ทับด้านบนสุด
+                // 2. วาดกรอบรูปทับลงไปบนภาพถ่ายจริง
                 if(frameImageObj.complete && frameImageObj.src) {
                     ctx.drawImage(frameImageObj, 0, 0, w, h);
                 }
@@ -437,8 +441,7 @@
                 changeScreen('res');
                 
                 setTimeout(() => { D.final.classList.add('ejected'); }, 300);
-                // พลุสีเอิร์ธโทน
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#D4A373', '#2A2826', '#F7F5F0', '#A09C96'] });
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#D4A373', '#2A2826', '#F7F5F0'] });
 
                 setTimeout(() => {
                     document.getElementById('res-sidebar').classList.add('show');
