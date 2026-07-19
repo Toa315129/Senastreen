@@ -263,8 +263,7 @@
             </div>
             
             <div class="btn-group">
-                <button class="btn-panel btn-main" onclick="OS.downloadLiveNewspaper()">🎥 บันทึกวิดีโอหนังสือพิมพ์ขยับได้ (7s)</button>
-                <button class="btn-panel btn-secondary" onclick="OS.downloadStaticImage()">📥 ดาวน์โหลดภาพนิ่ง (A4)</button>
+                <button class="btn-panel btn-main" onclick="OS.downloadStaticImage()">📥 ดาวน์โหลดภาพนิ่ง (A4)</button>
                 <button class="btn-panel btn-secondary" style="opacity:0.6;" onclick="location.reload()">เสร็จสิ้น / ออกแบบใหม่</button>
             </div>
         </div>
@@ -539,45 +538,7 @@
                 a.href = D.final.src; a.click();
             }
 
-            // Global-tier Magical Live Photo Feature Generator (Animated Newspaper canvas capture)
-            async function downloadLiveNewspaper() {
-                const btn = event.target; const origText = btn.innerText;
-                btn.innerText = "⏳ Generating Live Newspaper Video..."; btn.disabled = true;
-
-                const captureStream = D.canvas.captureStream(30);
-                const rec = new MediaRecorder(captureStream, { mimeType: 'video/webm' });
-                const chunks = [];
-                
-                rec.ondataavailable = e => chunks.push(e.data);
-                rec.onstop = () => {
-                    const blob = new Blob(chunks, { type: 'video/webm' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a'); a.href = url; a.download = `Live_Newspaper_${Date.now()}.webm`;
-                    a.click();
-                    
-                    // Return canvas display framework back to normal state
-                    drawNewspaperCanvas(D.canvas, s.capturedPhoto);
-                    D.final.src = D.canvas.toDataURL('image/jpeg', 0.95);
-                    btn.innerText = "✅ Download Finished!";
-                    setTimeout(() => { btn.innerText = origText; btn.disabled = false; }, 2000);
-                };
-
-                rec.start();
-                let startTime = Date.now();
-
-                // Animate properties inside the canvas to simulate a magical moving portrait
-                const liveLoop = setInterval(() => {
-                    // Pull direct real-time visual frames directly from active camera preview element during loop phase
-                    drawNewspaperCanvas(D.canvas, D.video);
-                    D.final.src = D.canvas.toDataURL('image/jpeg', 0.7);
-
-                    if (Date.now() - startTime >= 7000) { // 7 seconds motion capture execution
-                        clearInterval(liveLoop); rec.stop();
-                    }
-                }, 40);
-            }
-
-            return { startCamera, toggleCamFlip, toggleTimer, toggleMirror, takePressPhoto, downloadStaticImage, downloadLiveNewspaper };
+            return { startCamera, toggleCamFlip, toggleTimer, toggleMirror, takePressPhoto, downloadStaticImage };
         })();
     </script>
 </body>
