@@ -14,18 +14,22 @@
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Playfair+Display:ital,wght@0,600;1,600&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Playfair+Display:ital,wght@0,600;1,600&family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-paper: #F7F5F0;
-            --bg-paper-dark: #EAE6DF;
-            --ink-black: #2A2826;
-            --ink-light: #5E5A54;
-            --accent-color: #D4A373;
+            /* 📌 โทนสีใหม่สไตล์ทรงวาดวินเทจ */
+            --bg-paper: #F2EBE1;          /* สีครีมกระดาษเก่า */
+            --bg-paper-dark: #DFD6C8;     /* สีเงากระดาษ */
+            --ink-black: #2C2621;         /* สีน้ำตาลเข้ม/ดำหมึกพิมพ์ */
+            --ink-light: #7A6F64;         /* สีเทาอมน้ำตาล */
+            --accent-color: #9C3D2B;      /* สีแดงอิฐ/ศาลเจ้า */
+            --retro-green: #294038;       /* สีเขียวประตูบานเฟี้ยมวินเทจ */
+            
             --font-display-en: 'Playfair Display', serif;
             --font-handwriting: 'Caveat', cursive;
             --font-body: 'Prompt', sans-serif;
+            --font-mono: 'Courier New', Courier, monospace; /* ฟอนต์สลิปใบเสร็จ */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; }
@@ -39,8 +43,8 @@
 
         body::before {
             content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 999;
-            opacity: 0.4; mix-blend-mode: multiply;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+            opacity: 0.5; mix-blend-mode: multiply;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.12'/%3E%3C/svg%3E");
         }
 
         .screen {
@@ -53,74 +57,67 @@
         /* --- 1. HOME SCREEN --- */
         #screen-home { 
             justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle at center, #FFFCF9 0%, #F0EBE1 100%);
+            background: radial-gradient(circle at center, #F8F3EC 0%, #E6DBC9 100%);
         }
         .title-masthead {
             font-family: var(--font-handwriting); font-weight: 600;
             font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--accent-color);
-            letter-spacing: 2px; margin-bottom: 5px; transform: rotate(-2deg);
+            letter-spacing: 2px; margin-bottom: 5px; transform: rotate(-3deg);
         }
         .main-headline {
-            font-family: var(--font-display-en); font-size: clamp(3rem, 8vw, 5.5rem);
-            color: var(--ink-black); margin: 0; line-height: 1.1; letter-spacing: 1px;
+            font-family: var(--font-display-en); font-size: clamp(3.5rem, 9vw, 6rem);
+            color: var(--retro-green); margin: 0; line-height: 1; letter-spacing: 2px;
+            text-shadow: 3px 3px 0px rgba(0,0,0,0.1), -1px -1px 0px rgba(255,255,255,0.7); /* เอฟเฟกต์ป้ายสามมิติเก่าๆ */
         }
         .sub-headline {
-            font-family: var(--font-body); font-weight: 300; font-size: clamp(1rem, 2vw, 1.2rem);
-            color: var(--ink-light); margin-top: 20px; margin-bottom: 60px; letter-spacing: 2px;
+            font-family: var(--font-body); font-weight: 400; font-size: clamp(1rem, 2vw, 1.2rem);
+            color: var(--accent-color); margin-top: 15px; margin-bottom: 50px; letter-spacing: 2px;
+            padding: 5px 15px; border-top: 1px solid var(--accent-color); border-bottom: 1px solid var(--accent-color);
         }
         .btn-editorial {
-            background: transparent; border: 2px solid var(--ink-black); color: var(--ink-black);
-            padding: 15px 50px; font-size: 1.1rem; border-radius: 50px; cursor: pointer;
-            transition: all 0.4s ease; font-family: var(--font-body); font-weight: 500;
-            letter-spacing: 2px; text-transform: uppercase;
+            background: #F8F3EC; border: 2px solid var(--retro-green); color: var(--retro-green);
+            padding: 15px 40px; font-size: 1.1rem; border-radius: 4px; cursor: pointer;
+            transition: all 0.2s ease; font-family: var(--font-body); font-weight: 600;
+            letter-spacing: 3px; text-transform: uppercase;
+            box-shadow: 4px 4px 0px var(--retro-green); /* เงาแข็งสไตล์วินเทจ */
         }
-        .btn-editorial:hover { background: var(--ink-black); color: #fff; }
-        .btn-editorial:active { transform: scale(0.95); }
+        .btn-editorial:hover { 
+            background: var(--retro-green); color: #F8F3EC; 
+            transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--retro-green);
+        }
+        .btn-editorial:active { transform: translate(4px, 4px); box-shadow: 0px 0px 0px var(--retro-green); }
 
         /* --- 2. CAMERA SCREEN --- */
-        #screen-cam { background: #1c1b19; } 
+        #screen-cam { background: #1a1817; } 
         
         .cam-navbar {
             height: 70px; display: flex; justify-content: space-between; align-items: center;
-            padding: 0 30px; background: rgba(247, 245, 240, 0.95);
-            border-bottom: 1px solid rgba(42, 40, 38, 0.1); z-index: 20;
+            padding: 0 30px; background: var(--retro-green);
+            border-bottom: 3px solid var(--ink-black); z-index: 20;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
-        .brand-badge { font-family: var(--font-display-en); color: var(--ink-black); font-size: 1.2rem; font-weight: 600; letter-spacing: 1px; }
+        .brand-badge { font-family: var(--font-display-en); color: #F2EBE1; font-size: 1.2rem; font-weight: 600; letter-spacing: 2px; }
 
         .viewport { 
             flex: 1; position: relative; overflow: hidden; 
             display: flex; justify-content: center; align-items: center; 
-            padding: 20px 0;
+            padding: 20px 0; background: radial-gradient(circle, #2b2b2b 0%, #111 100%);
         }
         
         .live-preview-wrapper {
-            position: relative;
-            height: 100%;
-            aspect-ratio: 1240 / 1754;
-            background: #fff;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            overflow: hidden;
+            position: relative; height: 100%; aspect-ratio: 1240 / 1754;
+            background: #fff; box-shadow: 0 10px 40px rgba(0,0,0,0.5); overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         video#video-feed { 
-            position: absolute;
-            top: 21.66%;    
-            left: 5.64%;    
-            width: 88.71%;  
-            height: 44.47%; 
-            object-fit: cover; 
-            transform: scaleX(-1);
-            z-index: 1;
-            background: #000;
+            position: absolute; top: 21.66%; left: 5.64%; width: 88.71%; height: 44.47%; 
+            object-fit: cover; transform: scaleX(-1); z-index: 1; background: #000;
+            filter: sepia(0.2) contrast(1.1); /* ย้อมสีวิดีโอให้ดูอุ่นขึ้นนิดนึงตอนถ่าย */
         }
 
         img.overlay-frame {
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 2;
-            pointer-events: none; 
+            position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; 
         }
 
         .cam-sidebar {
@@ -128,41 +125,51 @@
             display: flex; flex-direction: column; gap: 15px; z-index: 50;
         }
         .btn-circle-tool {
-            width: 50px; height: 50px; background: rgba(255, 255, 255, 0.9); 
-            border: 1px solid rgba(42, 40, 38, 0.2); border-radius: 50%; color: var(--ink-black);
+            width: 50px; height: 50px; background: #E6DBC9; 
+            border: 2px solid var(--ink-black); border-radius: 8px; color: var(--ink-black);
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 1.2rem; cursor: pointer; transition: 0.2s; 
+            box-shadow: 2px 2px 0px var(--ink-black); font-family: var(--font-display-en); font-weight: bold;
         }
-        .btn-circle-tool:hover { background: var(--ink-black); color: #fff; }
+        .btn-circle-tool:hover { background: var(--accent-color); color: #fff; }
+        .btn-circle-tool:active { transform: translate(2px, 2px); box-shadow: 0px 0px 0px var(--ink-black); }
 
         #countdown {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-            font-size: 8rem; font-family: var(--font-display-en); color: #fff; display: none;
-            text-shadow: 0 5px 30px rgba(0,0,0,0.5); z-index: 100; font-weight: 600;
+            font-size: 8rem; font-family: var(--font-display-en); color: #F2EBE1; display: none;
+            text-shadow: 3px 3px 0px var(--accent-color), 0 0 30px rgba(0,0,0,0.8); z-index: 100; font-weight: 600;
         }
 
         .cam-footer {
-            height: 120px; background: rgba(247, 245, 240, 0.95);
+            height: 120px; background: #26221F; /* สีบอดี้กล้อง */
             display: flex; align-items: center; justify-content: center; z-index: 20;
-            border-top: 1px solid rgba(42, 40, 38, 0.1);
+            border-top: 4px solid #141210; box-shadow: 0 -5px 20px rgba(0,0,0,0.5);
+            background-image: repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px); /* ลายหนังกล้อง */
         }
         .shutter-trigger {
-            width: 75px; height: 75px; border: 3px solid var(--ink-black); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; background: transparent;
+            width: 80px; height: 80px; background: #D9D9D9;
+            border: 4px solid #A3A3A3; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer; 
+            box-shadow: inset 0 2px 5px #fff, 0 5px 15px rgba(0,0,0,0.5); /* ปุ่มชัตเตอร์เหล็ก */
         }
-        .shutter-inner { width: 57px; height: 57px; background: var(--ink-black); border-radius: 50%; transition: 0.2s; }
-        .shutter-trigger:active .shutter-inner { transform: scale(0.85); background: var(--accent-color); }
+        .shutter-inner { 
+            width: 60px; height: 60px; background: var(--accent-color); 
+            border-radius: 50%; transition: 0.1s; border: 2px solid #6E2619;
+            box-shadow: inset 0 2px 4px rgba(255,255,255,0.3);
+        }
+        .shutter-trigger:active .shutter-inner { transform: scale(0.9); background: #7A2D1F; }
 
         /* --- 3. RESULT SCREEN --- */
         #screen-result { 
             justify-content: center; align-items: center; 
-            background: #EAE6DF; flex-direction: row; gap: 4vw; padding: 40px;
+            background: radial-gradient(circle, var(--bg-paper) 0%, var(--bg-paper-dark) 100%);
+            flex-direction: row; gap: 4vw; padding: 40px;
         }
         
         .magazine-dispenser {
             height: 85vh; aspect-ratio: 210/297;
-            background: #fff; padding: 0; box-shadow: 10px 20px 50px rgba(0,0,0,0.15), -2px -2px 10px rgba(255,255,255,0.5);
-            overflow: hidden; position: relative; border-radius: 4px;
+            background: #fff; padding: 0; box-shadow: 15px 25px 40px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05);
+            overflow: hidden; position: relative; border-radius: 2px;
         }
         .newspaper-sheet { 
             width: 100%; height: auto; display: block; 
@@ -178,32 +185,35 @@
         .editorial-panel.show { opacity: 1; transform: translateX(0); }
 
         .log-terminal {
-            font-family: var(--font-body); color: var(--ink-light);
-            background: #fff; padding: 20px; border: 1px solid rgba(0,0,0,0.05);
-            font-size: 0.9rem; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            font-family: var(--font-mono); color: var(--ink-black);
+            background: #F8F5F0; padding: 20px; border: 1px dashed #A59B8E; /* สไตล์ใบเสร็จ */
+            font-size: 0.85rem; border-radius: 2px; box-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+            text-transform: uppercase; letter-spacing: 1px;
         }
-        .progress-track { height: 4px; background: var(--bg-paper-dark); width: 100%; margin-top: 12px; position: relative; overflow: hidden; border-radius: 2px;}
-        .progress-fill { position: absolute; left:0; top:0; bottom:0; background: var(--ink-black); width: 0%; transition: width 0.2s; }
+        .progress-track { height: 6px; background: #E6DBC9; width: 100%; margin-top: 12px; position: relative; overflow: hidden; border: 1px solid var(--ink-black);}
+        .progress-fill { position: absolute; left:0; top:0; bottom:0; background: var(--accent-color); width: 0%; transition: width 0.2s; }
 
         .qr-card { 
-            background: #fff; padding: 25px; text-align: center; border-radius: 12px;
-            display: none; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            background: #F8F5F0; padding: 20px; text-align: center; border-radius: 4px;
+            display: none; border: 2px solid var(--ink-black); box-shadow: 4px 4px 0px var(--ink-black); /* สไตล์กรอบตั๋ว */
         }
         .qr-card.active { display: block; animation: fadeIn 0.8s ease forwards; }
-        .qr-card span { color: var(--ink-black); font-size: 0.9rem; font-weight: 500; display: block; margin-top: 15px; letter-spacing: 1px;}
+        .qr-card span { color: var(--ink-black); font-size: 0.9rem; font-weight: 600; display: block; margin-top: 15px; letter-spacing: 1px;}
+        #qrcode { background: #fff; padding: 10px; border: 1px solid var(--ink-black); border-radius: 4px; display:inline-block !important; margin: 0 auto;}
 
-        .btn-group { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+        .btn-group { display: flex; flex-direction: column; gap: 12px; width: 100%; }
         .btn-panel {
-            padding: 15px; font-family: var(--font-body); font-weight: 500; font-size: 0.95rem;
-            cursor: pointer; width: 100%; border-radius: 50px; display: flex; align-items: center; 
-            justify-content: center; gap: 10px; border: none; transition: 0.3s;
+            padding: 15px; font-family: var(--font-body); font-weight: 600; font-size: 0.95rem;
+            cursor: pointer; width: 100%; border-radius: 4px; display: flex; align-items: center; 
+            justify-content: center; gap: 10px; border: 2px solid var(--ink-black); transition: 0.2s;
+            box-shadow: 3px 3px 0px var(--ink-black); letter-spacing: 1px;
         }
-        .btn-main { background: var(--ink-black); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .btn-main:hover { background: #111; transform: translateY(-2px); }
-        .btn-secondary { background: #fff; border: 1px solid rgba(0,0,0,0.1); color: var(--ink-black); }
-        .btn-secondary:hover { background: #F7F5F0; }
+        .btn-main { background: var(--retro-green); color: #F2EBE1; border-color: var(--retro-green); box-shadow: 3px 3px 0px #111A16;}
+        .btn-main:hover { background: #1F3029; transform: translate(2px, 2px); box-shadow: 1px 1px 0px #111A16; }
+        .btn-secondary { background: #F8F3EC; color: var(--ink-black); }
+        .btn-secondary:hover { background: #E6DBC9; transform: translate(2px, 2px); box-shadow: 1px 1px 0px var(--ink-black); }
 
-        #flash { position: fixed; inset: 0; background: #fff; z-index: 9999; opacity: 0; pointer-events: none; }
+        #flash { position: fixed; inset: 0; background: #F2EBE1; z-index: 9999; opacity: 0; pointer-events: none; }
         
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -228,7 +238,7 @@
     <div id="screen-cam" class="screen">
         <div class="cam-navbar">
             <div class="brand-badge">CANVAS STUDIO</div>
-            <div id="clock" style="font-family:var(--font-display-en); color:var(--ink-light); font-weight:600;">00:00</div>
+            <div id="clock" style="font-family:var(--font-mono); color:#A5BDB2; font-weight:600;">00:00</div>
         </div>
         
         <div class="viewport">
@@ -266,16 +276,16 @@
             </div>
 
             <div class="qr-card" id="qr-box">
-                <div id="qrcode" style="display:flex; justify-content:center;"></div>
+                <div id="qrcode"></div>
                 <span>SCAN TO DOWNLOAD</span>
             </div>
             
             <div class="btn-group">
-                <button class="btn-panel btn-main" onclick="OS.downloadLiveNewspaper()">✧ บันทึกวิดีโอ (Live Photo)</button>
+                <button class="btn-panel btn-main" onclick="OS.downloadLiveNewspaper()">✧ บันทึก Live Photo</button>
                 <button class="btn-panel btn-secondary" onclick="OS.downloadStaticImage()">↓ ดาวน์โหลดภาพนิ่ง</button>
                 <!-- 📌 เพิ่มปุ่มปริ้น PDF ตรงนี้ -->
                 <button class="btn-panel btn-secondary" onclick="OS.printToPDF()">🖨️ ปริ้นเป็นไฟล์ PDF</button>
-                <button class="btn-panel btn-secondary" style="background:transparent; border:none; text-decoration:underline; color:var(--ink-light);" onclick="location.reload()">กลับไปถ่ายใหม่</button>
+                <button class="btn-panel btn-secondary" style="background:transparent; border:none; box-shadow:none; text-decoration:underline; color:var(--ink-light); margin-top:5px;" onclick="location.reload()">กลับไปถ่ายใหม่</button>
             </div>
         </div>
     </div>
@@ -437,7 +447,7 @@
                 changeScreen('res');
                 
                 setTimeout(() => { D.final.classList.add('ejected'); }, 300);
-                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#D4A373', '#2A2826', '#F7F5F0'] });
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#9C3D2B', '#294038', '#E6DBC9'] });
 
                 setTimeout(() => {
                     document.getElementById('res-sidebar').classList.add('show');
@@ -466,7 +476,7 @@
                         document.getElementById('qrcode').innerHTML = "";
                         new QRCode(document.getElementById("qrcode"), {
                             text: resJson.data.url, width: 130, height: 130,
-                            colorDark : "#2A2826", colorLight : "#ffffff",
+                            colorDark : "#2C2621", colorLight : "#ffffff",
                             correctLevel : QRCode.CorrectLevel.H
                         });
                         document.getElementById('qr-box').classList.add('active');
